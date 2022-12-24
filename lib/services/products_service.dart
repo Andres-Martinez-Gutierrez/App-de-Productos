@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:productos_app/models/models.dart';
 
@@ -16,6 +17,8 @@ class ProductsService extends ChangeNotifier {
   bool isLoading = true;
   bool isSaving = false;
 
+  final _storage = const FlutterSecureStorage();
+
   ProductsService() {
     loadProducts();
   }
@@ -24,7 +27,9 @@ class ProductsService extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
 
-    final url = Uri.https(_baseUrl, 'products.json');
+    final url = Uri.https(_baseUrl, 'products.json', {
+      'auth': await _storage.read(key: 'token') ?? '',
+    });
     final resp = await http.get(url);
 
     final Map<String, dynamic> productsMap = json.decode(resp.body);
@@ -58,7 +63,9 @@ class ProductsService extends ChangeNotifier {
   }
 
   Future<String> updateProduct(Product product) async {
-    final url = Uri.https(_baseUrl, 'products/${product.id}.json');
+    final url = Uri.https(_baseUrl, 'products/${product.id}.json', {
+      'auth': await _storage.read(key: 'token') ?? '',
+    });
     final resp = await http.put(url, body: product.toJson());
     final decodedData = resp.body;
 
@@ -70,7 +77,9 @@ class ProductsService extends ChangeNotifier {
   }
 
   Future<String> createProduct(Product product) async {
-    final url = Uri.https(_baseUrl, 'products.json');
+    final url = Uri.https(_baseUrl, 'products.json', {
+      'auth': await _storage.read(key: 'token') ?? '',
+    });
     final resp = await http.post(url, body: product.toJson());
     final decodedData = json.decode(resp.body);
 
@@ -107,15 +116,15 @@ class ProductsService extends ChangeNotifier {
     final streamResponse = await imageUploadRequest.send();
     final resp = await http.Response.fromStream(streamResponse);
 
-    print(resp.body);
+    // print(resp.body);
 
     if (resp.statusCode != 200 && resp.statusCode != 201) {
-      print('algo salio mal');
-      print(resp.body);
+      // print('algo salio mal');
+      // print(resp.body);
       return null;
     }
 
-    this.newPictureFile = null;
+    newPictureFile = null;
 
     final decodedData = json.decode(resp.body);
     return decodedData['secure_url'];

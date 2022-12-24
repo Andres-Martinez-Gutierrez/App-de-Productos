@@ -38,7 +38,7 @@ class ProductImage extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withOpacity(00.5),
             blurRadius: 10.0,
-            offset: Offset(0, 5),
+            offset: const Offset(0, 5),
           )
         ],
       );

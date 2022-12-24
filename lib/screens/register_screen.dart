@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:productos_app/services/services.dart';
 import 'package:productos_app/providers/providers.dart';
 
 import 'package:productos_app/iu/input_decorations.dart';
 import 'package:productos_app/widgets/widgets.dart';
 
-import '../services/services.dart';
-
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class RegisterScreen extends StatelessWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +23,7 @@ class LoginScreen extends StatelessWidget {
                   children: [
                     const SizedBox(height: 10.0),
                     Text(
-                      'Login',
+                      'Crear Cuenta',
                       style: Theme.of(context).textTheme.headline4,
                     ),
                     const SizedBox(height: 30.0),
@@ -38,13 +37,13 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 50),
               TextButton(
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, 'register');
+                  Navigator.pushReplacementNamed(context, 'login');
                 },
                 style: ButtonStyle(
                     overlayColor: MaterialStateProperty.all(Colors.indigo),
                     shape: MaterialStateProperty.all(const StadiumBorder())),
                 child: const Text(
-                  'Crea una nueva cuenta',
+                  '¿Ya tienes Cuenta?',
                   style: TextStyle(fontSize: 18, color: Colors.black87),
                 ),
               ),
@@ -123,7 +122,7 @@ class _LoginForm extends StatelessWidget {
 
                     //TODO: Validar si el login es Correcto
 
-                    final String? errorMessage = await authService.login(
+                    final String? errorMessage = await authService.createUser(
                         loginForm.email, loginForm.password);
 
                     if (errorMessage == null) {
@@ -131,15 +130,13 @@ class _LoginForm extends StatelessWidget {
                       Navigator.pushReplacementNamed(context, 'home');
                     } else {
                       // Mostrar error en pantalla
-                      NotificationService.notificationShowSnackBar(
-                          'Correo Incorrecto');
                       //print(errorMessage);
                       loginForm.isLoading = false;
                     }
                   },
             child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 80.0, vertical: 15.0),
               child: Text(
                 loginForm.isLoading ? 'Cargando...' : 'Ingresar',
                 style: const TextStyle(color: Colors.white),

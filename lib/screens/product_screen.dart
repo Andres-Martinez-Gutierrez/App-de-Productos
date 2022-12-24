@@ -66,10 +66,10 @@ class _ProductScreenBody extends StatelessWidget {
                           source: ImageSource.camera, imageQuality: 100);
 
                       if (pickedFile == null) {
-                        print('No se escogieron imagenes');
+                        //print('No se escogieron imagenes');
                         return;
                       }
-                      print('Tenemos image ${pickedFile.path}');
+                      // print('Tenemos image ${pickedFile.path}');
 
                       productService
                           .updateSelectedProductImage(pickedFile.path);
@@ -97,8 +97,9 @@ class _ProductScreenBody extends StatelessWidget {
 
                 final String? imageUrl = await productService.uploadImage();
 
-                if (imageUrl != null)
+                if (imageUrl != null) {
                   productFormProvider.product.imagen = imageUrl;
+                }
 
                 await productService
                     .saveOrCreateProduct(productFormProvider.product);
@@ -138,6 +139,7 @@ class _ProductForm extends StatelessWidget {
                     if (value == null || value.isEmpty) {
                       return ' El campo Nombre es obligatorio ';
                     }
+                    return null;
                   },
                   decoration: InputDecorations.authInputDecoration(
                     hintText: 'Nombre del Producto',
@@ -162,6 +164,7 @@ class _ProductForm extends StatelessWidget {
                     if (value == null || value.isEmpty) {
                       return 'El campo precio es obligatorio';
                     }
+                    return null;
                   },
                   keyboardType: TextInputType.number,
                   decoration: InputDecorations.authInputDecoration(

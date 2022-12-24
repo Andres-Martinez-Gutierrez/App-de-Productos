@@ -85,7 +85,6 @@ class _PriceTag extends StatelessWidget {
   final int price;
 
   const _PriceTag({
-    super.key,
     required this.price,
   });
   @override

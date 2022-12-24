@@ -89,7 +89,7 @@ class _PurpleBox extends StatelessWidget {
 }
 
 class _Burbuja extends StatelessWidget {
-  const _Burbuja({super.key});
+  const _Burbuja();
 
   @override
   Widget build(BuildContext context) {
